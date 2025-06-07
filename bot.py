@@ -1,34 +1,30 @@
-import os
 import tweepy
 import requests
 
-# Twitter API credentials from environment variables
-API_KEY = os.environ['API_KEY']
-API_SECRET = os.environ['API_SECRET']
-ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
-ACCESS_TOKEN_SECRET = os.environ['ACCESS_TOKEN_SECRET']
-
-# Authenticate Twitter API
-auth = tweepy.OAuth1UserHandler(API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-api = tweepy.API(auth)
+# Twitter API credentials (replace with your own)
+API_KEY = "YOUR_API_KEY"
+API_SECRET_KEY = "YOUR_API_SECRET_KEY"
+ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"
+ACCESS_TOKEN_SECRET = "YOUR_ACCESS_TOKEN_SECRET"
 
 def get_quote():
-    # Example free quote API - returns JSON with quote and author
-    url = "https://api.quotable.io/random"
-    response = requests.get(url)
-    data = response.json()
-    quote = data.get("content", "Be positive and keep going!")
-    author = data.get("author", "Unknown")
-    return f'"{quote}" — {author}'
+    try:
+        response = requests.get("https://zenquotes.io/api/random", timeout=10)
+        response.raise_for_status()
+        data = response.json()[0]
+        quote = f'"{data["q"]}" - {data["a"]}'
+        return quote
+    except Exception as e:
+        print(f"Error fetching quote: {e}")
+        return "Stay inspired! #InspireDaily"
 
 def main():
+    auth = tweepy.OAuth1UserHandler(API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+    api = tweepy.API(auth)
+
     quote_text = get_quote()
-    try:
-        # Tweet the quote text
-        api.update_status(status=quote_text)
-        print("Quote tweeted successfully!")
-    except Exception as e:
-        print("Error posting tweet:", e)
+    print("Tweeting:", quote_text)
+    api.update_status(status=quote_text)
 
 if __name__ == "__main__":
     main()
