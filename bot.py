@@ -27,10 +27,10 @@ def verify_tokens(api_key, api_secret_key, access_token, access_token_secret):
 
 
 # Example: replace with your actual tokens to test
-API_KEY = "your_api_key_here"
-API_SECRET_KEY = "your_api_secret_key_here"
-ACCESS_TOKEN = "your_access_token_here"
-ACCESS_TOKEN_SECRET = "your_access_token_secret_here"
+API_KEY = "xSoenJLJTrpKFZ0hgDVw0Rtl3"
+API_SECRET_KEY = "2aTgkcl0G1aCGtuDIaRjgcHMtVnfczlIDvmYMXIblLm700qm7X"
+ACCESS_TOKEN = "1552971906487586816-ctU0ZEllw7rqmkQrETK5yy7XkfcBWn"
+ACCESS_TOKEN_SECRET = "jN4arqE1dFU9pKh85z4JKE03pPMo9BK5deyDjappmW74h"
 
 if verify_tokens(API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET):
     print("Tokens are good. You can run your bot now.")
