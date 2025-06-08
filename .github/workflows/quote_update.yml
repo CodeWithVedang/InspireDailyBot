@@ -26,7 +26,7 @@ jobs:
 
     - name: Commit and Push if Changed
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
       run: |
         git config --global user.name "CodeWithVedang"
         git config --global user.email "shelatkarvedang2@gmail.com"
@@ -35,7 +35,6 @@ jobs:
           echo "No changes to commit"
         else
           git commit -m "🤖 Update quote"
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
+          git remote set-url origin https://x-access-token:${PERSONAL_TOKEN}@github.com/${{ github.repository }}
           git push origin main
         fi
-    
