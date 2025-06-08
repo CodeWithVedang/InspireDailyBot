@@ -2,7 +2,7 @@ name: Update Daily Quote Page
 
 on:
   schedule:
-    - cron: '0 */12 * * *'
+    - cron: '0 */12 * * *'  # Every 12 hours
   workflow_dispatch:
 
 jobs:
@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout Repository using PAT
       uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.PERSONAL_TOKEN }}  # 👈 forces PAT-based checkout
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -24,23 +26,14 @@ jobs:
     - name: Run Quote Generator Script
       run: python generate_page.py
 
-    - name: Check if token is available
+    - name: Commit and Push Changes
       run: |
-        echo "Token length: ${#PERSONAL_TOKEN}"
-      env:
-        PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
-
-    - name: Commit and Push if Changed
-      env:
-        PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
-      run: |
-        git remote set-url origin https://x-access-token:${PERSONAL_TOKEN}@github.com/${{ github.repository }}
-        git config --global user.name "CodeWithVedang"
-        git config --global user.email "shelatkarvedang2@gmail.com"
+        git config user.name "CodeWithVedang"
+        git config user.email "shelatkarvedang2@gmail.com"
         git add index.html
         if git diff --cached --quiet; then
           echo "No changes to commit"
         else
           git commit -m "🤖 Update quote"
-          git push origin main
+          git push https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/CodeWithVedang/InspireDailyBot.git HEAD:main
         fi
