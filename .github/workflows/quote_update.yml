@@ -28,6 +28,7 @@ jobs:
       env:
         PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
       run: |
+        git remote set-url origin https://x-access-token:${PERSONAL_TOKEN}@github.com/${{ github.repository }}
         git config --global user.name "CodeWithVedang"
         git config --global user.email "shelatkarvedang2@gmail.com"
         git add index.html
@@ -35,6 +36,5 @@ jobs:
           echo "No changes to commit"
         else
           git commit -m "🤖 Update quote"
-          git remote set-url origin https://x-access-token:${PERSONAL_TOKEN}@github.com/${{ github.repository }}
           git push origin main
         fi
