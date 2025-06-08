@@ -24,6 +24,12 @@ jobs:
     - name: Run Quote Generator Script
       run: python generate_page.py
 
+    - name: Debug: Check if token is available
+      run: |
+        echo "Token length: ${#PERSONAL_TOKEN}"
+      env:
+        PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+
     - name: Commit and Push if Changed
       env:
         PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
