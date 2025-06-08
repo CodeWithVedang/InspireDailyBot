@@ -1,0 +1,46 @@
+name: Update Daily Quote Page
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-quote:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install Dependencies
+      run: pip install requests
+
+    - name: Run Quote Generator Script
+      run: python generate_page.py
+
+    - name: Debug: Check if token is available
+      run: |
+        echo "Token length: ${#PERSONAL_TOKEN}"
+      env:
+        PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+
+    - name: Commit and Push if Changed
+      env:
+        PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+      run: |
+        git remote set-url origin https://x-access-token:${PERSONAL_TOKEN}@github.com/${{ github.repository }}
+        git config --global user.name "CodeWithVedang"
+        git config --global user.email "shelatkarvedang2@gmail.com"
+        git add index.html
+        if git diff --cached --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "🤖 Update quote"
+          git push origin main
+        fi
