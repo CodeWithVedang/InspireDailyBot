@@ -2,7 +2,7 @@ name: Update Daily Quote Page
 
 on:
   schedule:
-    - cron: '0 */12 * * *'  # Every 12 hours
+    - cron: '0 * * * *'  # Every hour at minute 0
   workflow_dispatch:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     - name: Checkout Repository using PAT
       uses: actions/checkout@v3
       with:
-        token: ${{ secrets.PERSONAL_TOKEN }}  # 👈 forces PAT-based checkout
+        token: ${{ secrets.PERSONAL_TOKEN }}
 
     - name: Set up Python
       uses: actions/setup-python@v4
