@@ -3,8 +3,8 @@ name: Update Daily Quote Page
 
 on:
   schedule:
-    - cron: '0 */12 * * *'  # Every 12 hours
-  workflow_dispatch:  # Allows manual run from GitHub
+    - cron: '0 */12 * * *'  # Runs every 12 hours
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   update-quote:
@@ -26,6 +26,8 @@ jobs:
       run: python generate_page.py
 
     - name: Commit and Push if Changed
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
@@ -34,5 +36,5 @@ jobs:
           echo "No changes to commit"
         else
           git commit -m "🤖 Update quote"
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
           git push
-        fi
